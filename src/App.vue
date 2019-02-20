@@ -1,60 +1,148 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+
+    <div class="head">
+      <date-pick
+        v-model="date"
+        :months="months"
+        :weekdays="weekdays"
+        :format="'YYYY.MM.DD'"
+      ></date-pick>
+    </div>
+
+    <div class="container-wr">
+      <div class="side-bar">
+        side-bar
+      </div>
+      <div class="container">
+        <div class="calendar-date">
+
+          <div v-for="item of this.lengthDay" class="day">
+            <div class="month">
+              {{ dateHeadM(item) }}
+            </div>
+            <div class="day-number">
+              {{ dateHeadD(item) }}
+            </div>
+            <div class="day-week">
+              {{ dateHeadN(item) }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
   </div>
 </template>
 
 <script>
+
+import DatePick from 'vue-date-pick';
+import 'vue-date-pick/dist/vueDatePick.css';
+import fecha from 'fecha';
+
 export default {
   name: 'app',
+  components: {
+    DatePick
+  },
+  props: {
+    weekdays: {
+      type: Array,
+      default: () => ([
+        'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'
+      ])
+    },
+    months: {
+      type: Array,
+      default: () => ([
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+      ])
+    }
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      date: fecha.format(new Date(), 'YYYY.MM.D'),
+      msg: 'Welcome to Your Vue.js App',
+      month: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+      days: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      lengthDay: 30
+    }
+  },
+  watch: {
+    date(val) {
+
+      let D = new Date(val);
+      D.setDate(D.getDate() + 1);
+
+
+
+      console.log(D);
+    }
+  },
+  methods: {
+    dateHeadM(el) {
+      let nowDate = new Date(this.date);
+      nowDate.setDate(nowDate.getDate()+el-1);
+      return this.month[nowDate.getMonth()].slice(0,3);
+    },
+    dateHeadD(el) {
+      let nowDate = new Date(this.date);
+      nowDate.setDate(nowDate.getDate()+el-1);
+      return nowDate.getDate();
+    },
+    dateHeadN(el) {
+      let nowDate = new Date(this.date);
+      nowDate.setDate(nowDate.getDate()+el-1);
+      return this.days[nowDate.getDay()];
     }
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+  body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial;
+  }
+  .container-wr {
+    display: flex;
+    width: 100%;
+    .side-bar {
+      flex: 0 0 300px;
+    }
+    .container {
+      width: 100%;
+    }
+    .calendar-date {
+      display: flex;
+      width: 100%;
+      overflow: auto;
+      .day {
+        flex: 0 0 90px;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        .month {
+          font-size: 13px;
+        }
+        .day-number {
+          font-size: 14px;
+        }
+        .day-week {
+          font-size: 12px;
+        }
+      }
+    }
+  }
 </style>
