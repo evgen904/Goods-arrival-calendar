@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <div class="container-wr">
       <div class="side-bar">
         <div class="date-wrap">
@@ -16,7 +15,7 @@
         </div>
         <ul class="products">
           <li
-            v-for="item in products[userIndex].product"
+            v-for="item in products"
             :key="item.id"
           >
             <div>
@@ -29,20 +28,37 @@
               <button>edit</button>
               <button>del</button>
             </div>
+            <div>
+              <input type="text" value="">
+              <button>Add</button>
+            </div>
           </li>
         </ul>
       </div>
       <div class="container">
         <div class="calendar-date">
           <div v-for="item of lengthDay" class="day" :key="item">
-            <div class="month">
-              {{ dateHeadM(item) }}
+            <div>
+              <div class="month">
+                {{ dateHead(item, 'M') }}
+              </div>
+              <div class="day-number">
+                {{ dateHead(item, 'D') }}
+              </div>
+              <div class="day-week">
+                {{ dateHead(item, 'N') }}
+              </div>
             </div>
-            <div class="day-number">
-              {{ dateHeadD(item) }}
-            </div>
-            <div class="day-week">
-              {{ dateHeadN(item) }}
+            <div class="name-val">
+              <div>
+                Остаток
+              </div>
+              <div>
+                Приход
+              </div>
+              <div>
+                Уход
+              </div>
             </div>
           </div>
         </div>
@@ -54,18 +70,18 @@
           >
             <div
               class="day"
-              v-for="day of products[userIndex].product"
-              :key="day.id"
+              v-for="prod of products"
             >
-              <input type="number" value="">
-              <input type="number" value="">
-              <input type="number" value="">
+              <span>
+                {{ valDate(dateNext(item), prod.id, 'balance') }}
+              </span>
+              <input type="number" :value="valDate(dateNext(item), prod.id, 'add')">
+              <input type="number" :value="valDate(dateNext(item), prod.id, 'del')">
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -95,13 +111,8 @@ export default {
     }
   },
   created() {
-
-    if (this.userId) {
-      this.userIndex = this.products.findIndex(i => i.userId==this.userId);
-    }
-
-
-
+    this.load(this.userId);
+    this.prodLoad(this.userId);
   },
   data () {
     return {
@@ -111,148 +122,55 @@ export default {
       days: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
       lengthDay: 20,
       userId: '123456',
-      userIndex: null,
-      products: [
-        {
-          userId: '123456',
-          product: [
-            {
-              id: '1',
-              name: 'Cola',
-              price: 2000
-            },
-            {
-              id: '2',
-              name: 'Fanta',
-              price: 4000
-            },
-            {
-              id: '3',
-              name: 'Bonaqua',
-              price: 6000
-            },
-            {
-              id: '4',
-              name: 'Mirinda',
-              price: 3000
-            },
-            {
-              id: '5',
-              name: 'Sprite',
-              price: 4200
-            }
-          ]
-        },
-        {
-          userId: '345678',
-          product: [
-            {
-              id: '1',
-              name: 'Cola 2',
-              price: 1000
-            },
-            {
-              id: '2',
-              name: 'Fanta 3',
-              price: 2500
-            },
-            {
-              id: '3',
-              name: 'Bonaqua 4',
-              price: 4500
-            },
-            {
-              id: '4',
-              name: 'Mirinda 5',
-              price: 3600
-            },
-            {
-              id: '5',
-              name: 'Sprite 6',
-              price: 4800
-            }
-          ]
-        },
-        {
-          userId: '234567',
-          product: [
-            {
-              id: '1',
-              name: 'Cola 11',
-              price: 2300
-            },
-            {
-              id: '2',
-              name: 'Fanta 22',
-              price: 4200
-            },
-            {
-              id: '3',
-              name: 'Bonaqua 33',
-              price: 6400
-            }
-          ]
-        }
-      ],
-      dataCalendar: [
-        {
-          userId: '234567',
-          dates: [
-            {
-              date: '20.02.2019',
-              products: [
-                {
-                  id: '1',
-                  coming: 0,
-                  leaving: 0,
-                  balance: 0
-                },
-                {
-                  id: '2',
-                  coming: 0,
-                  leaving: 0,
-                  balance: 0
-                },
-                {
-                  id: '3',
-                  coming: 0,
-                  leaving: 0,
-                  balance: 0
-                },
-                {
-                  id: '4',
-                  coming: 0,
-                  leaving: 0,
-                  balance: 0
-                },
-                {
-                  id: '5',
-                  coming: 0,
-                  leaving: 0,
-                  balance: 0
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      products: [],
+      dataCalendar: []
     }
   },
   methods: {
-    dateHeadM(el) {
+    dateHead(el, type) {
       let nowDate = new Date(this.date);
       nowDate.setDate(nowDate.getDate()+el-1);
-      return this.month[nowDate.getMonth()].slice(0,3);
+      if (type=='M') {
+        return this.month[nowDate.getMonth()].slice(0,3);
+      }
+      else if (type=='D') {
+        return nowDate.getDate();
+      }
+      else if (type=='N') {
+        return this.days[nowDate.getDay()];
+      }
     },
-    dateHeadD(el) {
+    dateNext(el) {
       let nowDate = new Date(this.date);
       nowDate.setDate(nowDate.getDate()+el-1);
-      return nowDate.getDate();
+      return fecha.format(nowDate, 'YYYY.MM.D');
     },
-    dateHeadN(el) {
-      let nowDate = new Date(this.date);
-      nowDate.setDate(nowDate.getDate()+el-1);
-      return this.days[nowDate.getDay()];
+    valDate(date, idProd, balance) {
+      let tt = this.dataCalendar.find(i => i.id==date);
+      if (tt!==undefined) {
+        let yy = tt.products.find(i => i.prodId==idProd);
+        return yy.params[balance];
+      }
+    },
+    load(index) {
+      this.$http.get('http://localhost:3000/calendar')
+        .then(response => {
+          return response.json()
+        })
+        .then(userId => {
+          let dateUser = userId.find(i => i.userId==index);
+          return this.dataCalendar = dateUser.date;
+        })
+    },
+    prodLoad(index) {
+      this.$http.get('http://localhost:3000/products')
+        .then(products => {
+          return products.json()
+        })
+        .then(userId => {
+          let dateUser = userId.find(i => i.userId==index);
+          return this.products = dateUser.product;
+        })
     }
   }
 }
@@ -302,10 +220,13 @@ export default {
       display: flex;
       width: 100%;
       .day {
+        display: flex;
+        flex-direction: column;
         flex: 0 0 150px;
         border: 1px solid #ccc;
         margin-right: -1px;
         margin-bottom: -1px;
+        position: relative;
         .month {
           font-size: 13px;
         }
@@ -314,6 +235,16 @@ export default {
         }
         .day-week {
           font-size: 12px;
+        }
+        .name-val {
+          display: none;
+          position: absolute;
+          top: 0;
+          left: 0;
+          > div {
+
+            transform: rotate(-90deg);
+          }
         }
       }
     }
@@ -330,7 +261,10 @@ export default {
         height: 90px;
         border: 1px solid #ccc;
         margin: 0 -3px -1px 0;
-        input[type="number"] {
+        input[type="number"], span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: 50px;
           border: none;
           text-align: center;

@@ -1,0 +1,326 @@
+{
+  "products": [
+    {
+      "userId": "123456",
+      "product": [
+        {
+          "id": "1",
+          "name": "Cola",
+          "price": 2000
+        },
+        {
+          "id": "2",
+          "name": "Fanta",
+          "price": 4000
+        },
+        {
+          "id": "3",
+          "name": "Bonaqua",
+          "price": 6000
+        },
+        {
+          "id": "4",
+          "name": "Mirinda",
+          "price": 3000
+        },
+        {
+          "id": "5",
+          "name": "Sprite",
+          "price": 4200
+        }
+      ]
+    },
+    {
+      "userId": "345678",
+      "product": [
+        {
+          "id": "1",
+          "name": "Cola 2",
+          "price": 1000
+        },
+        {
+          "id": "2",
+          "name": "Fanta 3",
+          "price": 2500
+        },
+        {
+          "id": "3",
+          "name": "Bonaqua 4",
+          "price": 4500
+        },
+        {
+          "id": "4",
+          "name": "Mirinda 5",
+          "price": 3600
+        },
+        {
+          "id": "5",
+          "name": "Sprite 6",
+          "price": 4800
+        }
+      ]
+    },
+    {
+      "userId": "234567",
+      "product": [
+        {
+          "id": "1",
+          "name": "Cola 11",
+          "price": 2300
+        },
+        {
+          "id": "2",
+          "name": "Fanta 22",
+          "price": 4200
+        },
+        {
+          "id": "3",
+          "name": "Bonaqua 33",
+          "price": 6400
+        }
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "userId": "123456",
+      "date": [
+        {
+          "id": "2019.02.24",
+          "products": [
+            {
+              "prodId": "1",
+              "params": {
+                "balance": 5,
+                "add": 3,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "2",
+              "params": {
+                "balance": 4,
+                "add": 0,
+                "del": 2
+              }
+            },
+            {
+              "prodId": "3",
+              "params": {
+                "balance": 8,
+                "add": 1,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "4",
+              "params": {
+                "balance": 12,
+                "add": 0,
+                "del": 4
+              }
+            },
+            {
+              "prodId": "5",
+              "params": {
+                "balance": 7,
+                "add": 1,
+                "del": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "2019.02.25",
+          "products": [
+            {
+              "prodId": "1",
+              "params": {
+                "balance": 5,
+                "add": 3,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "2",
+              "params": {
+                "balance": 4,
+                "add": 0,
+                "del": 2
+              }
+            },
+            {
+              "prodId": "3",
+              "params": {
+                "balance": 8,
+                "add": 1,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "4",
+              "params": {
+                "balance": 12,
+                "add": 0,
+                "del": 4
+              }
+            },
+            {
+              "prodId": "5",
+              "params": {
+                "balance": 7,
+                "add": 1,
+                "del": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "2019.02.26",
+          "products": [
+            {
+              "prodId": "1",
+              "params": {
+                "balance": 5,
+                "add": 3,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "2",
+              "params": {
+                "balance": 4,
+                "add": 0,
+                "del": 2
+              }
+            },
+            {
+              "prodId": "3",
+              "params": {
+                "balance": 8,
+                "add": 1,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "4",
+              "params": {
+                "balance": 12,
+                "add": 0,
+                "del": 4
+              }
+            },
+            {
+              "prodId": "5",
+              "params": {
+                "balance": 7,
+                "add": 1,
+                "del": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "234567",
+      "date": [
+        {
+          "id": "2019.02.24",
+          "products": [
+            {
+              "prodId": "1",
+              "params": {
+                "balance": 5,
+                "add": 3,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "2",
+              "params": {
+                "balance": 4,
+                "add": 0,
+                "del": 2
+              }
+            },
+            {
+              "prodId": "3",
+              "params": {
+                "balance": 8,
+                "add": 1,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "4",
+              "params": {
+                "balance": 12,
+                "add": 0,
+                "del": 4
+              }
+            },
+            {
+              "prodId": "5",
+              "params": {
+                "balance": 7,
+                "add": 1,
+                "del": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "456789",
+      "date": [
+        {
+          "id": "2019.02.24",
+          "products": [
+            {
+              "prodId": "1",
+              "params": {
+                "balance": 5,
+                "add": 3,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "2",
+              "params": {
+                "balance": 4,
+                "add": 0,
+                "del": 2
+              }
+            },
+            {
+              "prodId": "3",
+              "params": {
+                "balance": 8,
+                "add": 1,
+                "del": 1
+              }
+            },
+            {
+              "prodId": "4",
+              "params": {
+                "balance": 12,
+                "add": 0,
+                "del": 4
+              }
+            },
+            {
+              "prodId": "5",
+              "params": {
+                "balance": 7,
+                "add": 1,
+                "del": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
