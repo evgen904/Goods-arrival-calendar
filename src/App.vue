@@ -1,126 +1,96 @@
 <template>
   <div id="app">
-    <v-app>
-      <div class="container-wr">
-        <div class="side-bar">
-          <div class="date-wrap">
-            <date-pick
-              v-model="date"
-              :months="months"
-              :weekdays="weekdays"
-              :format="'YYYY.MM.DD'"
-            ></date-pick>
-            <v-layout row justify-center>
-              <v-dialog v-model="dialog" max-width="600px">
-                <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark v-on="on">Добавить</v-btn>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">Добавить товар</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-layout wrap>
-                      <v-flex xs12>
-                        <v-text-field label="Название" required></v-text-field>
-                      </v-flex>
-                      <v-flex xs12>
-                        <v-text-field label="Цена" required></v-text-field>
-                      </v-flex>
-                    </v-layout>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click="dialog = false">Закрыть</v-btn>
-                    <v-btn color="blue darken-1" flat @click="dialog = false">Добавить</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-layout>
-          </div>
-          <ul class="products">
-            <li
-              v-for="item in products"
-              :key="item.id"
-            >
-              <div>
-                {{item.name}}
-              </div>
-              <div>
-                {{item.price}}
-              </div>
-              <div>
-                <button>edit</button>
-                <button>del</button>
-              </div>
-              <div>
-                <input type="text" value="">
-                <button>Add</button>
-              </div>
-            </li>
-          </ul>
+    <div class="container-wr">
+      <div class="side-bar">
+        <div class="date-wrap">
+          <date-pick
+            v-model="date"
+            :months="months"
+            :weekdays="weekdays"
+            :format="'YYYY.MM.DD'"
+          ></date-pick>
+          <button @click="showModal = true">add</button>
         </div>
-        <div class="container-in">
-          <div class="calendar-date">
-            <div v-for="item of lengthDay" class="day" :key="item">
-              <div>
-                <div class="month">
-                  {{ dateHead(item, 'M') }}
-                </div>
-                <div class="day-number">
-                  {{ dateHead(item, 'D') }}
-                </div>
-                <div class="day-week">
-                  {{ dateHead(item, 'N') }}
-                </div>
+        <products></products>
+      </div>
+      <div class="container-in">
+        <div class="calendar-date">
+          <div v-for="item of lengthDay" class="day" :key="item">
+            <div>
+              <div class="month">
+                {{ dateHead(item, 'M') }}
               </div>
-              <div class="name-val">
-                <div>
-                  Остаток
-                </div>
-                <div>
-                  Приход
-                </div>
-                <div>
-                  Уход
-                </div>
+              <div class="day-number">
+                {{ dateHead(item, 'D') }}
+              </div>
+              <div class="day-week">
+                {{ dateHead(item, 'N') }}
+              </div>
+            </div>
+            <div class="name-val">
+              <div>
+                Остаток
+              </div>
+              <div>
+                Приход
+              </div>
+              <div>
+                Уход
               </div>
             </div>
           </div>
-          <div class="calendar-date-cen">
+        </div>
+        <div class="calendar-date-cen">
+          <div
+            class="day-col"
+            v-for="item of lengthDay"
+            :key="item"
+          >
             <div
-              class="day-col"
-              v-for="item of lengthDay"
-              :key="item"
+              class="day"
+              v-for="prod of products"
             >
-              <div
-                class="day"
-                v-for="prod of products"
-              >
               <span>
                 {{ valDate(dateNext(item), prod.id, 'balance') }}
               </span>
-                <input type="number" :value="valDate(dateNext(item), prod.id, 'add')">
-                <input type="number" :value="valDate(dateNext(item), prod.id, 'del')">
-              </div>
+              <input type="number" :value="valDate(dateNext(item), prod.id, 'add')">
+              <input type="number" :value="valDate(dateNext(item), prod.id, 'del')">
             </div>
           </div>
         </div>
       </div>
-    </v-app>
+    </div>
+    <modal v-if="showModal" @close="showModal = false">
+      <h3 slot="header">custom header</h3>
+    </modal>
   </div>
 </template>
 
 <script>
 
+import fb from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/database'
+import 'firebase/firestore'
+import 'firebase/messaging'
+import 'firebase/functions'
+
 import DatePick from 'vue-date-pick';
 import 'vue-date-pick/dist/vueDatePick.css';
 import fecha from 'fecha';
+import ModalTemplate from './components/ModalTemplate';
+import products from './components/Products';
+
 
 export default {
   name: 'app',
+  created() {
+    this.load(this.userId);
+  },
   components: {
-    DatePick
+    DatePick,
+    modal: ModalTemplate,
+    products
   },
   props: {
     weekdays: {
@@ -136,10 +106,6 @@ export default {
       ])
     }
   },
-  created() {
-    this.load(this.userId);
-    this.prodLoad(this.userId);
-  },
   data () {
     return {
       date: fecha.format(new Date(), 'YYYY.MM.D'),
@@ -148,9 +114,9 @@ export default {
       days: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
       lengthDay: 20,
       userId: '123456',
-      products: [],
       dataCalendar: [],
-      dialog: false
+      dialog: false,
+      showModal: false
     }
   },
   methods: {
@@ -188,16 +154,6 @@ export default {
           let dateUser = userId.find(i => i.userId==index);
           return this.dataCalendar = dateUser.date;
         })
-    },
-    prodLoad(index) {
-      this.$http.get('http://localhost:3000/products')
-        .then(products => {
-          return products.json()
-        })
-        .then(userId => {
-          let dateUser = userId.find(i => i.userId==index);
-          return this.products = dateUser.product;
-        })
     }
   }
 }
@@ -225,16 +181,6 @@ export default {
         border-right: 1px solid #ccc;
         margin-right: -1px;
         margin-bottom: -1px;
-      }
-      .products {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        li {
-          height: 90px;
-          border: 1px solid #ccc;
-          margin: 0 -1px -1px 0;
-        }
       }
     }
     .container-in {
@@ -269,7 +215,6 @@ export default {
           top: 0;
           left: 0;
           > div {
-
             transform: rotate(-90deg);
           }
         }
