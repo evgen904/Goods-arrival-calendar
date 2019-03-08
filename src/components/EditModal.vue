@@ -24,8 +24,8 @@
               <button class="modal-default-button" @click="$emit('close')">
                 Закрыть
               </button>
-              <button class="modal-default-button" @click="createProduct">
-                Добавить
+              <button class="modal-default-button" @click="editProd">
+                Сохранить
               </button>
             </slot>
           </div>
@@ -46,24 +46,24 @@
   import 'firebase/functions'
 
   export default {
+    props: ['name','price','id'],
     data() {
       return {
-        nameProduct: '',
-        priceProduct: null
+        nameProduct: this.name,
+        priceProduct: this.price
       }
     },
     methods: {
-      createProduct() {
-        const product = {
-          name: this.nameProduct,
-          price: this.priceProduct
-        }
-        this.$store.dispatch('createProd', product)
-          .then(() => {
-            this.$store.dispatch('fetchProducts')
-            this.$emit('close')
+      editProd() {
+        if (this.nameProduct !== '' && this.priceProduct !== '') {
+          this.$store.dispatch('updateProd', {
+            name: this.nameProduct,
+            price: this.priceProduct,
+            id: this.id
           })
-          .catch(() => {})
+
+          this.$emit('close')
+        }
       }
     }
   }

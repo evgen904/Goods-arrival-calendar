@@ -23,6 +23,17 @@ export default {
     loadProducts (state, payload) {
       state.products = payload
     },
+    createProd (state, payload) {
+      state.products.push(payload)
+    },
+    updateProd (state, {name, price, id}) {
+      const prod = state.products.find(a => {
+        return a.id === id
+      })
+
+      prod.name = name
+      prod.price = price
+    }
   },
   actions: {
     // принимаем данные через асинхронный запрос к firebase
@@ -54,6 +65,31 @@ export default {
         console.log(error.message)
         throw error
       }
+    },
+    async createProd ({commit, getters}, payload) {
+      try {
+        const newProd = new Product(
+          payload.name,
+          payload.price
+        )
+        await fb.database().ref('products/123456/product').push(newProd)
+      } catch (error) {
+        console.log(error.message)
+        throw error
+      }
+    },
+    async updateProd ({commit}, {name, price, id}) {
+      try {
+        await fb.database().ref('products/123456/product').child(id).update({
+          name, price
+        })
+        commit('updateProd', {
+          name, price, id
+        })
+      } catch (error) {
+        console.log(error.message)
+        throw error
+      }
     }
   },
   getters: {
@@ -61,5 +97,10 @@ export default {
     myProducts (state, getters) {
       return state.products;
     },
+    prodById (state) {
+      return prodId => {
+        return state.products.find(prod => prod.id === prodId)
+      }
+    }
   }
 }

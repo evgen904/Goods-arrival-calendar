@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import router from './router'
 import App from './App.vue'
 
 // создаем store для vuex
@@ -19,6 +20,7 @@ Vue.use(VueResource)
 
 new Vue({
   el: '#app',
+  router,
   store,
   render: h => h(App),
   created () {
