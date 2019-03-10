@@ -90,17 +90,21 @@ export default {
         console.log(error.message)
         throw error
       }
+    },
+    async deleteProd ({commit}, {id}) {
+      try {
+        const fbVal = await fb.database().ref('products/123456/product').child(id)
+        fbVal.remove()
+      } catch (error) {
+        console.log(error.message)
+        throw error
+      }
     }
   },
   getters: {
     // используем getters myProducts, для передачи данных из state.products, в компонент Products.vue
     myProducts (state, getters) {
       return state.products;
-    },
-    prodById (state) {
-      return prodId => {
-        return state.products.find(prod => prod.id === prodId)
-      }
     }
   }
 }

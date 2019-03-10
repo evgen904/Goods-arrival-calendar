@@ -3,29 +3,17 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
           <div>
-            <div>Название товара</div>
-            <div>
-              <input type="text" v-model="nameProduct">
-            </div>
+            Удалить товар {{nameProduct}} ?
           </div>
-          <br>
-          <div>
-            <div>Цена товара</div>
-            <div>
-              <input type="text" v-model.number="priceProduct">
-            </div>
-          </div>
-
           <br><br>
           <div class="modal-footer">
             <slot name="footer">
               <button class="modal-default-button" @click="$emit('close')">
                 Закрыть
               </button>
-              <button class="modal-default-button" @click="createProduct">
-                Добавить
+              <button class="modal-default-button" @click="delProd">
+                Удалить
               </button>
             </slot>
           </div>
@@ -46,19 +34,17 @@
   import 'firebase/functions'
 
   export default {
+    props: ['name','id'],
     data() {
       return {
-        nameProduct: '',
-        priceProduct: null
+        nameProduct: this.name
       }
     },
     methods: {
-      createProduct() {
-        const product = {
-          name: this.nameProduct,
-          price: this.priceProduct
-        }
-        this.$store.dispatch('createProd', product)
+      delProd() {
+        this.$store.dispatch('deleteProd', {
+          id: this.id
+        })
           .then(() => {
             this.$store.dispatch('fetchProducts')
             this.$emit('close')
