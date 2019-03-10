@@ -69,7 +69,7 @@
   }
 </script>
 
-<style type="scss" scoped>
+<style lang="scss" scoped>
   .products {
     padding: 0;
     margin: 0;
