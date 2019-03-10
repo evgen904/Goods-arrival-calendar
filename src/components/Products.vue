@@ -16,8 +16,8 @@
           <button @click="delProduct(item.name,item.id)">del</button>
         </div>
         <div>
-          <input type="text" value="">
-          <button>Add</button>
+          <input type="text" value="" :ref="'balance'+item.id">
+          <button @click="addBalance(item.id)">Add</button>
         </div>
       </li>
     </ul>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import fecha from 'fecha';
   import EditModal from './EditModal'
   import DeleteModal from './DeleteModal'
   export default {
@@ -64,6 +65,26 @@
         this.showModalDel = true
         this.name = name
         this.id = id
+      },
+      addBalance (id) {
+        let refBalance = 'balance'+id;
+        let thisVal = this.$refs[refBalance][0].value;
+
+        if (thisVal !== '') {
+          const params = {
+            balance: thisVal,
+            add: 0,
+            del: 0,
+            prodId: id,
+            date: fecha.format(new Date(), 'YYYY-MM-D')
+          }
+          this.$store.dispatch('firstBalance', params)
+            .then(() => {
+              console.log('ok')
+            })
+            .catch(() => {})
+        }
+
       }
     }
   }
