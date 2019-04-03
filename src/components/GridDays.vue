@@ -8,9 +8,10 @@
       <div
         class="day"
         v-for="prod in myProducts"
-        :key="prod.is"
+        :key="prod.id"
       >
         <span>
+          {{test(item, prod.id, 'balance')}}
           <!--{{ valDate(dateNext(item), prod.id, 'balance') }}-->
         </span>
         <input type="number">
@@ -23,7 +24,9 @@
 </template>
 
 <script>
+  import fecha from 'fecha';
   export default {
+    props: ['date'],
     data() {
       return {
 
@@ -33,9 +36,21 @@
       // принимаем полученные данные из vuex (getters), и данные выводим через v-for
       myProducts () {
         return this.$store.getters.myProducts
+      },
+      myDays () {
+        return this.$store.getters.myDays
       }
     },
     methods: {
+      test (el, idProd, type) {
+        /*let nowDate = new Date(this.date);
+        nowDate.setDate(nowDate.getDate()+el-1);
+        nowDate = fecha.format(nowDate, 'YYYY-MM-D');
+        */
+
+
+        //return console.log(this.myDays);
+      },
       dateNext(el) {
         let nowDate = new Date(this.date);
         nowDate.setDate(nowDate.getDate()+el-1);

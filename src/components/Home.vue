@@ -15,7 +15,7 @@
       </div>
       <div class="container-in">
         <headline-days :date="date"></headline-days>
-        <grid-days></grid-days>
+        <grid-days :date="date"></grid-days>
       </div>
     </div>
     <modal v-if="showModal" @close="showModal = false">

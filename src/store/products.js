@@ -50,7 +50,6 @@ export default {
         Object.keys(products).forEach(key => {
           const prod = products[key]
           resultProducts.push(
-
             // используем конструктор класса Product
             new Product(prod.name, prod.price, key)
           )

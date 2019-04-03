@@ -35,6 +35,12 @@ new Vue({
 
     // при вызове created, вызываем асинхронный метод fetchProducts, для получения данных из firebase
     this.$store.dispatch('fetchProducts')
+    this.$store.dispatch('fetchDays')
+
+
+    console.log(this.$store)
+
+
 
   }
 })
